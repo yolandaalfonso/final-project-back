@@ -1,13 +1,7 @@
 package dev.yol.final_project_back.register;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
 import java.util.Base64;
-import java.util.stream.Collectors;
 
-import javax.management.relation.RoleNotFoundException;
-
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
