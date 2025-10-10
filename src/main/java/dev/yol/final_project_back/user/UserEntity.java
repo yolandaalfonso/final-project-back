@@ -1,10 +1,13 @@
 package dev.yol.final_project_back.user;
 
+import dev.yol.final_project_back.profile.ProfileEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,14 +33,13 @@ public class UserEntity {
     private String password;
 
     //Relación con Profile
-    /* @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ProfileEntity profile;
 
-    //Relación con Pacientes, que nos permite eliminarlos en cascada cuando borramos el user correspondiente,    
+    /* //Relación con Pacientes, que nos permite eliminarlos en cascada cuando borramos el user correspondiente,    
     @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<PatientEntity> patients = new HashSet<>(); */
-
 
     
 }

@@ -1,9 +1,6 @@
 package dev.yol.final_project_back.user;
 
-import java.util.stream.Collectors;
-
-import javax.management.relation.RoleNotFoundException;
-
+import dev.yol.final_project_back.profile.ProfileEntity;
 import dev.yol.final_project_back.user.dtos.UserRequestDTO;
 import dev.yol.final_project_back.user.dtos.UserResponseDTO;
 
@@ -14,37 +11,37 @@ public class UserMapper {
         userEntity.setPassword(userRequestDTO.password());
 
         ProfileEntity profile = new ProfileEntity();
-        profile.setDni(userRequestDTO.dni());
+        profile.setUserName(userRequestDTO.userName());
         profile.setName(userRequestDTO.name());
         profile.setFirstSurname(userRequestDTO.firstSurname());
-        profile.setSecondSurname(userRequestDTO.secondSurname());
-        profile.setPhoneNumber(userRequestDTO.phoneNumber());
+        profile.setBio(userRequestDTO.bio());
+        profile.setAvatar(userRequestDTO.avatar());
         profile.setUser(userEntity);
         userEntity.setProfile(profile);
 
-        Set<RoleEntity> roles = userRequestDTO.roles().stream()
+       /*  Set<RoleEntity> roles = userRequestDTO.roles().stream()
                 .map(roleName -> roleRepository.findByName(roleName)
                         .orElseThrow(() -> new RoleNotFoundException(roleName)))
                 .collect(Collectors.toSet());
-        userEntity.setRoles(roles);
+        userEntity.setRoles(roles); */
 
         return userEntity;
     }
 
     public UserResponseDTO userEntityToUserResponseDto(UserEntity userEntity) {
-        Set<String> roles = userEntity.getRoles().stream()
+        /* Set<String> roles = userEntity.getRoles().stream()
                 .map(RoleEntity::getName)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()); */
 
         return new UserResponseDTO(
                 userEntity.getId_user(),
                 userEntity.getEmail(),
-                userEntity.getProfile().getDni(),
                 userEntity.getProfile().getName(),
+                userEntity.getProfile().getUserName(),
                 userEntity.getProfile().getFirstSurname(),
-                userEntity.getProfile().getSecondSurname(),
-                userEntity.getProfile().getPhoneNumber(),
-                roles
+                userEntity.getProfile().getBio(),
+                userEntity.getProfile().getAvatar()
+                /* roles */
         );
     }
 }
