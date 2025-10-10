@@ -60,7 +60,11 @@ public class RegisterServiceImpl implements InterfaceRegisterService{
         return new RegisterResponseDTO(
                 saved.getId_user(),
                 saved.getEmail(),
-                saved.getProfile().getUserName()
+                saved.getProfile().getUserName(),
+                saved.getProfile().getName(),
+                saved.getProfile().getFirstSurname(),
+                saved.getProfile().getBio(),
+                saved.getProfile().getAvatar()
                 /* saved.getProfile().getDni(),
                 saved.getProfile().getName(),
                 saved.getProfile().getFirstSurname(),
