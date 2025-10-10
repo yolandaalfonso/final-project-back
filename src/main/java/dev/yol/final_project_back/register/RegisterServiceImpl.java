@@ -1,19 +1,25 @@
 package dev.yol.final_project_back.register;
 
 import java.util.Base64;
-import java.util.stream.Collectors;
-
-import javax.management.relation.RoleNotFoundException;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import dev.yol.final_project_back.profile.ProfileEntity;
 import dev.yol.final_project_back.user.UserEntity;
 import dev.yol.final_project_back.user.UserRepository;
 
+@Service
 public class RegisterServiceImpl implements InterfaceRegisterService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public RegisterServiceImpl(UserRepository userRepository, 
+                               PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public RegisterResponseDTO register(RegisterRequestDTO dto) {
@@ -40,23 +46,25 @@ public class RegisterServiceImpl implements InterfaceRegisterService{
                 .build();
 
 
-        /* ProfileEntity profile = ProfileEntity.builder()
-                .dni(dto.dni())
-                .name(dto.name())
-                .firstSurname(dto.firstSurname())
-                .secondSurname(dto.secondSurname())
-                .phoneNumber(dto.phoneNumber())
+        ProfileEntity profile = ProfileEntity.builder()
+                .userName(dto.userName())
                 .user(user)
                 .build();
 
-        user.setProfile(profile); */
+        user.setProfile(profile);
+
 
         UserEntity saved = userRepository.save(user);
+
 
         return new RegisterResponseDTO(
                 saved.getId_user(),
                 saved.getEmail(),
-                saved.getUserName()()
+                saved.getProfile().getUserName(),
+                saved.getProfile().getName(),
+                saved.getProfile().getFirstSurname(),
+                saved.getProfile().getBio(),
+                saved.getProfile().getAvatar()
                 /* saved.getProfile().getDni(),
                 saved.getProfile().getName(),
                 saved.getProfile().getFirstSurname(),
