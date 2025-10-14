@@ -55,6 +55,10 @@ public class RegisterServiceImpl implements InterfaceRegisterService{
 
         ProfileEntity profile = ProfileEntity.builder()
                 .userName(dto.userName())
+                .name(dto.name())
+                .firstSurname(dto.firstSurname())
+                .bio(dto.bio())
+                .avatar(dto.avatar())
                 .user(user)
                 .build();
 
