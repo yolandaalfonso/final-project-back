@@ -1,4 +1,4 @@
-package dev.yol.final_project_back.auth;
+/* package dev.yol.final_project_back.auth;
 
 import org.springframework.stereotype.Service;
 
@@ -28,12 +28,12 @@ public class TokenService {
         // recuperar scopes de usuario
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                /* .filter(authority -> !authority.startsWith("ROLE")) */
+                .filter(authority -> !authority.startsWith("ROLE")) 
                 .collect(Collectors.joining(" "));
 
         System.out.println("<--------------" + scope.toString());
 
-        JwtClaimsSet claims = JwtClaimsSet.builder()
+         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
                 .subject(authentication.getName())
@@ -42,6 +42,6 @@ public class TokenService {
                 .build();
 
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
-        return this.jwtEncoder.encode(encoderParameters).getTokenValue();
+        return this.jwtEncoder.encode(encoderParameters).getTokenValue(); 
     }
-}
+} */

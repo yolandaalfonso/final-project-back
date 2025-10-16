@@ -4,12 +4,6 @@ import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 
-
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,8 +23,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Value("${jwt.key}")
-    private String key;
+    /* @Value("${jwt.key}")
+    private String key; */
 
     @Value("${api-endpoint}")
     private String apiEndpoint;
@@ -46,6 +40,7 @@ public class SecurityConfiguration {
                 .requestMatchers(
                     apiEndpoint + "/register",
                     apiEndpoint + "/register/**",
+                    apiEndpoint + "/auth/login",
                     apiEndpoint + "/login",
                     "/h2-console/**",
                     "/error" 
@@ -82,7 +77,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /* @Bean
     JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(key.getBytes()));
     }
@@ -92,5 +87,5 @@ public class SecurityConfiguration {
         byte[] bytes = key.getBytes();
         SecretKeySpec secretKey = new SecretKeySpec(bytes, 0, bytes.length, "RSA");
         return NimbusJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS512).build();
-    }
+    } */
 }
