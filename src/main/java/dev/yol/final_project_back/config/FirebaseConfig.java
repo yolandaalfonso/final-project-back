@@ -1,12 +1,14 @@
 package dev.yol.final_project_back.config;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -20,13 +22,19 @@ public class FirebaseConfig {
     private Resource privateKey;
 
     @Bean
-    public FirebaseApp firebaseApp() throws IOException {
-        InputStream credentials = new ByteArrayInputStream(privateKey.getContentAsByteArray());
-        FirebaseOptions firebaseOptions = FirebaseOptions.builder()
-            .setCredentials(GoogleCredentials.fromStream(credentials))
-            .build();
-        return FirebaseApp.initializeApp(firebaseOptions);
+public FirebaseApp firebaseApp() throws IOException {
+    // Esto buscará private-key.json dentro de src/main/resources/
+    ClassPathResource serviceAccount = new ClassPathResource("private-key.json");
+
+    if (FirebaseApp.getApps().isEmpty()) {
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                .build();
+        return FirebaseApp.initializeApp(options);
+    } else {
+        return FirebaseApp.getInstance();
     }
+}
 
     @Bean
     public FirebaseAuth firebaseAuth(FirebaseApp firebaseApp) {
