@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +16,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import dev.yol.final_project_back.security.TokenAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +32,13 @@ public class SecurityConfiguration {
 
     @Value("${api-endpoint}")
     private String apiEndpoint;
+
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
+
+    @Autowired
+    public SecurityConfiguration(TokenAuthenticationFilter tokenAuthenticationFilter) {
+        this.tokenAuthenticationFilter = tokenAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -47,6 +58,9 @@ public class SecurityConfiguration {
                 ).permitAll() // público
                 .anyRequest().authenticated() // el resto protegido
             )
+
+            // 🔹 Añadimos el filtro Firebase antes del estándar
+            .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
             // 🔹 Stateless session (JWT ready)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
