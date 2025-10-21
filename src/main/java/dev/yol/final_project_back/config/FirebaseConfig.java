@@ -21,6 +21,10 @@ public class FirebaseConfig {
     @Value("classpath:/private-key.json")
     private Resource privateKey;
 
+    @Value("${firebase.storage.bucket}")
+    private String storageBucket;
+
+
     @Bean
 public FirebaseApp firebaseApp() throws IOException {
     // Esto buscará private-key.json dentro de src/main/resources/

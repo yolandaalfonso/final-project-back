@@ -6,11 +6,11 @@ import java.util.List;
 public record TripRequestDTO(
     String title, 
     String description, 
-    String coverPhoto,
-    List<String> photos, 
+    String coverImage,
     String country,
     Date startDate,
-    Date endDate
+    Date endDate, 
+    Long traveler
 ) {
 
 }

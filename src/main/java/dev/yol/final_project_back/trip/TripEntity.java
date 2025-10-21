@@ -1,12 +1,8 @@
 package dev.yol.final_project_back.trip;
 
 import java.util.Date;
-import java.util.List;
 
 import dev.yol.final_project_back.user.UserEntity;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,16 +30,8 @@ public class TripEntity {
 
     private String title;
     private String description;
-    private String coverPhoto;
-
-    @ElementCollection
-    @CollectionTable(
-        name="trip_photos",
-        joinColumns = @JoinColumn(name = "trip_id")
-    )
-    @Column(name = "photo_url")  
-    private List<String> photos;
-
+    private String coverImage;
+    
     private String country;
     private Date startDate;
     private Date endDate;
@@ -52,6 +40,12 @@ public class TripEntity {
     @JoinColumn(name="user_id", nullable=false)
     /* @JsonBackReference */
     private UserEntity traveler;
+
+
+     /* //Relación con Imágenes, que nos permite eliminarlos en cascada cuando borramos el viaje correspondiente,    
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<ImageEntity> images = new HashSet<>(); */
 
     
 }
