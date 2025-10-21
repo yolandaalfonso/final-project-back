@@ -1,5 +1,103 @@
 package dev.yol.final_project_back.trip;
 
-public class TripServiceImpl {
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import dev.yol.final_project_back.trip.dtos.TripRequestDTO;
+import dev.yol.final_project_back.trip.dtos.TripResponseDTO;
+import dev.yol.final_project_back.user.UserEntity;
+import dev.yol.final_project_back.user.UserRepository;
+import dev.yol.final_project_back.user.exceptions.UserNotFoundException;
+
+@Service("tripService")
+public class TripServiceImpl implements ITripService{
     
+    private final TripRepository repository;
+    private final UserRepository userRepository;
+
+    public TripServiceImpl(TripRepository repository, UserRepository userRepository) {
+        this.repository = repository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public List<TripResponseDTO> getEntities() {
+        List<TripResponseDTO> trips = new ArrayList<>();
+
+        repository.findAll().forEach(c -> {
+            TripResponseDTO trip = TripMapper.toDTO(c);
+            trips.add(trip);
+        });
+
+        return trips;
+    }
+
+    @Override
+    public TripResponseDTO createEntity(TripRequestDTO tripRequestDTO) {
+        if (tripRequestDTO.traveler() == null) {
+            /* throw new TripException("User ID cannot be null"); */
+        }
+        UserEntity user = userRepository.findById(tripRequestDTO.traveler())
+                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con id: " + tripRequestDTO.traveler()));
+        TripEntity trip = TripMapper.toEntity(tripRequestDTO);
+        trip.setTraveler(user);
+        TripEntity tripStored = repository.save(trip);
+        return TripMapper.toDTO(tripStored) ;
+    }
+
+    @Override
+    public TripResponseDTO getById(Long id) {
+        TripEntity trip = repository.findById(id).orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
+        return TripMapper.toDTO(trip);
+    }
+
+    @Override
+    public TripResponseDTO updateEntity(Long id, TripRequestDTO tripRequestDTO) {
+        if (tripRequestDTO.traveler() == null) {
+            /* throw new TripException("User ID cannot be null"); */
+        }
+        TripEntity trip = repository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
+
+        UserEntity user = userRepository.findById(tripRequestDTO.traveler())
+                .orElseThrow(() -> new UserNotFoundException("Viaje no encontrado con id: " + tripRequestDTO.traveler()));
+
+        // Actualizar los campos necesarios
+        trip.setTitle(tripRequestDTO.title());
+        trip.setDescription(tripRequestDTO.description());
+        trip.setCoverImage(tripRequestDTO.coverImage());
+        trip.setCountry(tripRequestDTO.country());
+        trip.setStartDate(tripRequestDTO.startDate());
+        trip.setEndDate(tripRequestDTO.endDate());
+        trip.setTraveler(user);
+
+        TripEntity updatedEntity = repository.save(trip);
+        return TripMapper.toDTO(updatedEntity);
+
+    }
+
+    @Override
+    public void deleteEntity(Long id) {
+        TripEntity entity = repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
+        repository.delete(entity);
+    }
+    
+
+    /* @Override
+    public TripResponseDTO getByIdentificationNumber(String identificationNumber) {
+        PatientEntity patient = repository.findByIdentificationNumber(identificationNumber)
+                .orElseThrow(() -> new PatientException("No se encontró paciente con identificación: " + identificationNumber));
+        return PatientMapper.toDTO(patient);
+    }
+
+    @Override
+    public List<PatientResponseDTO> searchByName(String name) {
+        List<PatientEntity> patients = repository.findByName(name);
+        return patients.stream()
+                .map(PatientMapper::toDTO)
+                .toList();
+    } */
 }
