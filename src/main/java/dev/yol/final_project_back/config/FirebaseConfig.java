@@ -21,8 +21,8 @@ public class FirebaseConfig {
     @Value("classpath:/private-key.json")
     private Resource privateKey;
 
-    @Value("${firebase.storage.bucket}")
-    private String storageBucket;
+    /* @Value("${firebase.storage.bucket}")
+    private String storageBucket; */
 
 
     @Bean
