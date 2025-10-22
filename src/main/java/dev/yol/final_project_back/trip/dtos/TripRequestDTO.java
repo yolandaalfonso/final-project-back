@@ -8,8 +8,7 @@ public record TripRequestDTO(
     String coverImage,
     String country,
     Date startDate,
-    Date endDate, 
-    Long traveler
+    Date endDate
 ) {
 
 }

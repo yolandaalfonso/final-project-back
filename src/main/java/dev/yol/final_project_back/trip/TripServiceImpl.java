@@ -3,6 +3,8 @@ package dev.yol.final_project_back.trip;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import dev.yol.final_project_back.trip.dtos.TripRequestDTO;
@@ -36,8 +38,26 @@ public class TripServiceImpl implements ITripService{
 
     @Override
     public TripResponseDTO createEntity(TripRequestDTO tripRequestDTO) {
+    // 1️⃣ Obtener el usuario autenticado del contexto de Spring Security
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String uid = authentication.getName(); // Firebase UID
+    
+    // 2️⃣ Buscar el usuario en tu base de datos por UID
+    UserEntity user = userRepository.findByUid(uid)
+        .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con UID: " + uid));
+    
+    // 3️⃣ Crear y guardar el viaje
+    TripEntity trip = TripMapper.toEntity(tripRequestDTO);
+    trip.setTraveler(user);
+    TripEntity tripStored = repository.save(trip);
+
+    // 4️⃣ Devolver el DTO
+    return TripMapper.toDTO(tripStored);
+    }
+    
+   /*  public TripResponseDTO createEntity(TripRequestDTO tripRequestDTO) {
         if (tripRequestDTO.traveler() == null) {
-            /* throw new TripException("User ID cannot be null"); */
+             throw new TripException("User ID cannot be null"); 
         }
         UserEntity user = userRepository.findById(tripRequestDTO.traveler())
                 .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con id: " + tripRequestDTO.traveler()));
@@ -45,7 +65,7 @@ public class TripServiceImpl implements ITripService{
         trip.setTraveler(user);
         TripEntity tripStored = repository.save(trip);
         return TripMapper.toDTO(tripStored) ;
-    }
+    } */
 
     @Override
     public TripResponseDTO getById(Long id) {
@@ -55,14 +75,14 @@ public class TripServiceImpl implements ITripService{
 
     @Override
     public TripResponseDTO updateEntity(Long id, TripRequestDTO tripRequestDTO) {
-        if (tripRequestDTO.traveler() == null) {
-            /* throw new TripException("User ID cannot be null"); */
-        }
+       /*  if (tripRequestDTO.traveler() == null) {
+            /throw new TripException("User ID cannot be null");
+        }*/
         TripEntity trip = repository.findById(id)
         .orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
 
-        UserEntity user = userRepository.findById(tripRequestDTO.traveler())
-                .orElseThrow(() -> new UserNotFoundException("Viaje no encontrado con id: " + tripRequestDTO.traveler()));
+       /*  UserEntity user = userRepository.findById(tripRequestDTO.traveler())
+                .orElseThrow(() -> new UserNotFoundException("Viaje no encontrado con id: " + tripRequestDTO.traveler())); */
 
         // Actualizar los campos necesarios
         trip.setTitle(tripRequestDTO.title());
@@ -71,7 +91,7 @@ public class TripServiceImpl implements ITripService{
         trip.setCountry(tripRequestDTO.country());
         trip.setStartDate(tripRequestDTO.startDate());
         trip.setEndDate(tripRequestDTO.endDate());
-        trip.setTraveler(user);
+        /* trip.setTraveler(user); */
 
         TripEntity updatedEntity = repository.save(trip);
         return TripMapper.toDTO(updatedEntity);

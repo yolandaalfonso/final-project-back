@@ -45,34 +45,38 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
 
         String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX)) {
-            String token = authorizationHeader.replace(BEARER_PREFIX, "");
-            Optional<String> userId = extractUserIdFromToken(token);
-
-            if (userId.isPresent()) {
-                var authentication = new UsernamePasswordAuthenticationToken(
-                        userId.get(), null, null);
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                setAuthErrorDetails(response);
-                return;
-            }
+        // 🔹 Si no hay token, dejamos pasar (podría ser endpoint público)
+        if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER_PREFIX)) {
+            System.out.println("⚠️ No se encontró cabecera Authorization o no empieza con 'Bearer '");
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        // 🔹 Continuar con el resto de filtros
-        filterChain.doFilter(request, response);
-    }
+        String token = authorizationHeader.substring(BEARER_PREFIX.length());
 
-    private Optional<String> extractUserIdFromToken(String token) {
         try {
+            // ✅ Verificamos el token con Firebase
             FirebaseToken firebaseToken = firebaseAuth.verifyIdToken(token, true);
-            String userId = firebaseToken.getUid();
-            return Optional.of(userId);
+            String uid = firebaseToken.getUid();
+            String email = firebaseToken.getEmail();
+
+            System.out.println("🟢 Token válido. UID: " + uid + " | Email: " + email);
+
+            // ✅ Creamos la autenticación
+            var authentication = new UsernamePasswordAuthenticationToken(uid, null, null);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            // ✅ Guardamos la autenticación en el contexto
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
         } catch (FirebaseAuthException e) {
-            return Optional.empty();
+            System.out.println("❌ Error al verificar token Firebase: " + e.getMessage());
+            setAuthErrorDetails(response);
+            return;
         }
+
+        // ✅ Continuar la ejecución de la cadena
+        filterChain.doFilter(request, response);
     }
 
     private void setAuthErrorDetails(HttpServletResponse response) throws IOException {
