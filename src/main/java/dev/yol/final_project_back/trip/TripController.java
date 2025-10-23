@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import dev.yol.final_project_back.implementations.IService;
 import dev.yol.final_project_back.trip.dtos.TripRequestDTO;
@@ -33,7 +35,17 @@ public class TripController {
         return service.getEntities();
     }
 
-     @PostMapping("")
+    @PostMapping(value = "", consumes = { "multipart/form-data" })
+    public ResponseEntity<TripResponseDTO> createEntity(
+        @RequestPart("trip") TripRequestDTO dtoRequest,
+        @RequestPart(value = "images", required = false) List<MultipartFile> files) {
+
+    TripResponseDTO entityStored = tripService.createEntity(dtoRequest, files);
+    return ResponseEntity.status(201).body(entityStored);
+}
+
+
+    /*  @PostMapping("")
     public ResponseEntity<TripResponseDTO> createEntity(@RequestBody TripRequestDTO dtoRequest) {
 
         if (dtoRequest.title().isBlank()) return ResponseEntity.badRequest().build();
@@ -43,7 +55,7 @@ public class TripController {
         if (entityStored == null) return ResponseEntity.noContent().build();
 
         return ResponseEntity.status(201).body(entityStored);
-    }
+    } */
 
     @GetMapping("/{id}")
     public ResponseEntity<TripResponseDTO> show(@PathVariable("id") Long id) {

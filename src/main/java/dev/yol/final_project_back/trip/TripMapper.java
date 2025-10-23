@@ -12,7 +12,7 @@ public class TripMapper {
         TripEntity trip = new TripEntity();
         trip.setTitle(dtoRequest.title());
         trip.setDescription(dtoRequest.description());
-        trip.setCoverImage(dtoRequest.coverImage());
+        /* trip.setCoverImage(dtoRequest.coverImage()); */
         trip.setCountry(dtoRequest.country());
         trip.setStartDate(dtoRequest.startDate());
         trip.setEndDate(dtoRequest.endDate());
@@ -38,7 +38,7 @@ public static TripResponseDTO toDTO(TripEntity entity) {
             entity.getId_trip(),
             entity.getTitle(),
             entity.getDescription(),
-            entity.getCoverImage(),
+            /* entity.getCoverImage(), */
             entity.getCountry(),
             entity.getStartDate(),
             entity.getEndDate(),
