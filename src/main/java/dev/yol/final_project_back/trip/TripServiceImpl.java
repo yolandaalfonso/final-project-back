@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import dev.yol.final_project_back.images.ImageEntity;
 import dev.yol.final_project_back.trip.dtos.TripRequestDTO;
 import dev.yol.final_project_back.trip.dtos.TripResponseDTO;
 import dev.yol.final_project_back.user.UserEntity;
@@ -38,6 +40,13 @@ public class TripServiceImpl implements ITripService{
 
     @Override
     public TripResponseDTO createEntity(TripRequestDTO tripRequestDTO) {
+    // si no se mandan imágenes, simplemente crea el viaje normal
+    return createEntity(tripRequestDTO, List.of());
+    }
+
+
+    @Override
+    public TripResponseDTO createEntity(TripRequestDTO tripRequestDTO, List<MultipartFile> files) {
     // 1️⃣ Obtener el usuario autenticado del contexto de Spring Security
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String uid = authentication.getName(); // Firebase UID
@@ -49,6 +58,17 @@ public class TripServiceImpl implements ITripService{
     // 3️⃣ Crear y guardar el viaje
     TripEntity trip = TripMapper.toEntity(tripRequestDTO);
     trip.setTraveler(user);
+
+    // 4️⃣ Si el DTO tiene imágenes, mapéalas y asígnalas al viaje
+    if (tripRequestDTO.images() != null && !tripRequestDTO.images().isEmpty()) {
+        tripRequestDTO.images().forEach(imgDto -> {
+            ImageEntity image = new ImageEntity();
+            image.setUrl(imgDto.url());
+            image.setTrip(trip); // clave: establecer la relación inversa
+            trip.getImages().add(image);
+        });
+    }
+
     TripEntity tripStored = repository.save(trip);
 
     // 4️⃣ Devolver el DTO
@@ -87,7 +107,7 @@ public class TripServiceImpl implements ITripService{
         // Actualizar los campos necesarios
         trip.setTitle(tripRequestDTO.title());
         trip.setDescription(tripRequestDTO.description());
-        trip.setCoverImage(tripRequestDTO.coverImage());
+       /*  trip.setCoverImage(tripRequestDTO.coverImage()); */
         trip.setCountry(tripRequestDTO.country());
         trip.setStartDate(tripRequestDTO.startDate());
         trip.setEndDate(tripRequestDTO.endDate());
@@ -104,6 +124,7 @@ public class TripServiceImpl implements ITripService{
             .orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
         repository.delete(entity);
     }
+
     
 
     /* @Override

@@ -6,7 +6,7 @@ public record TripResponseDTO(
     Long id_trip,
     String title, 
     String description, 
-    String coverImage,
+   /*  String coverImage, */
     String country,
     Date startDate,
     Date endDate, 

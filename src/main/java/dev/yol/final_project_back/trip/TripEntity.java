@@ -1,8 +1,14 @@
 package dev.yol.final_project_back.trip;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import dev.yol.final_project_back.images.ImageEntity;
 import dev.yol.final_project_back.user.UserEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +37,7 @@ public class TripEntity {
 
     private String title;
     private String description;
-    private String coverImage;
+    /* private String coverImage; */
     
     private String country;
     private Date startDate;
@@ -42,10 +49,10 @@ public class TripEntity {
     private UserEntity traveler;
 
 
-     /* //Relación con Imágenes, que nos permite eliminarlos en cascada cuando borramos el viaje correspondiente,    
-    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
+     //Relación con Imágenes, que nos permite eliminarlos en cascada cuando borramos el viaje correspondiente  
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<ImageEntity> images = new HashSet<>(); */
+    private Set<ImageEntity> images = new HashSet<>();
 
     
 }
