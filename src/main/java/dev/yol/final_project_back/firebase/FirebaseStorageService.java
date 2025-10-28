@@ -6,6 +6,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.Acl.Role;
+import com.google.cloud.storage.Acl.User;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
@@ -18,6 +21,9 @@ public class FirebaseStorageService {
         Bucket bucket = StorageClient.getInstance().bucket();
 
         Blob blob = bucket.create(fileName, file.getBytes(), file.getContentType());
+
+        // 🌍 Hacerlo público
+        blob.createAcl(Acl.of(User.ofAllUsers(), Role.READER));
 
         // Generar URL pública
         return String.format("https://storage.googleapis.com/%s/%s", bucket.getName(), fileName);
