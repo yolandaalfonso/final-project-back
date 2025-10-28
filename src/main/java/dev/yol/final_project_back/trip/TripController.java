@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,14 +62,25 @@ public class TripController {
         return ResponseEntity.ok().body(trip);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<TripResponseDTO> updateEntity(
+        @PathVariable("id") Long id,
+        @RequestPart("trip") TripRequestDTO dtoRequest,
+        @RequestPart(value = "images", required = false) List<MultipartFile> files
+    ) {
+        TripResponseDTO updated = tripService.updateEntity(id, dtoRequest, files);
+        return ResponseEntity.ok(updated);
+    }
+
+
+    /* @PutMapping("/{id}")
     public ResponseEntity<TripResponseDTO> update(@PathVariable("id") Long id, @RequestBody TripRequestDTO dtoRequest) {
 
         
         TripResponseDTO updated = service.updateEntity(id, dtoRequest);
         return ResponseEntity.ok(updated);
 
-    }
+    } */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
