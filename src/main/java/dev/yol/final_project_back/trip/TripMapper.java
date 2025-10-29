@@ -39,6 +39,12 @@ public class TripMapper {
             travelerId = entity.getTraveler().getId_user();
         }
 
+        // 🧍‍♀️ Obtener username desde ProfileEntity (vía UserEntity)
+        String travelerUsername = "Viajero anónimo";
+        if (entity.getTraveler() != null && entity.getTraveler().getProfile() != null) {
+            travelerUsername = entity.getTraveler().getProfile().getUserName();
+        }
+
         // ✅ Crear el TripResponseDTO con todos los datos
         return new TripResponseDTO(
             entity.getId_trip(),
@@ -48,7 +54,7 @@ public class TripMapper {
             entity.getStartDate(),
             entity.getEndDate(),
             imageDTOs,     // 👈 Aquí pasamos la lista de imágenes convertidas
-            travelerId
+            travelerUsername
         );
     }
 

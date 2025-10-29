@@ -8,13 +8,13 @@ import dev.yol.final_project_back.images.ImageDTO;
 public record TripResponseDTO(
     Long id_trip,
     String title, 
-    String description, 
-   /*  String coverImage, */
+    String description,
     String country,
     Date startDate,
     Date endDate,
     List<ImageDTO> images,
-    Long traveler
+    /* Long traveler */
+    String travelerUsername
 ) {
 
 }
