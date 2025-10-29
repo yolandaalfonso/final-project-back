@@ -54,6 +54,8 @@ public class TripServiceImpl implements ITripService{
     // 1️⃣ Obtener el usuario autenticado del contexto de Spring Security
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String uid = authentication.getName(); // Firebase UID
+
+    System.out.println("🔹 UID recibido del token en createEntity: " + uid);
     
     // 2️⃣ Buscar el usuario en tu base de datos por UID
     UserEntity user = userRepository.findByUid(uid)
@@ -89,6 +91,7 @@ public class TripServiceImpl implements ITripService{
         }
 
     TripEntity tripStored = repository.save(trip);
+    
 
     // 4️⃣ Devolver el DTO
     return TripMapper.toDTO(tripStored);

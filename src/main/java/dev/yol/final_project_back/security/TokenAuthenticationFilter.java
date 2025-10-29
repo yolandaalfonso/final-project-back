@@ -1,7 +1,7 @@
 package dev.yol.final_project_back.security;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.util.Collections;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,10 +60,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter{
             String uid = firebaseToken.getUid();
             String email = firebaseToken.getEmail();
 
+            if (email == null) {
+                System.out.println("⚠️ Token válido pero sin email, usando UID");
+                email = uid;
+            }
+
             System.out.println("🟢 Token válido. UID: " + uid + " | Email: " + email);
 
             // ✅ Creamos la autenticación
-            var authentication = new UsernamePasswordAuthenticationToken(uid, null, null);
+            /* var authentication = new UsernamePasswordAuthenticationToken(uid, null, null); */
+            var authentication = new UsernamePasswordAuthenticationToken(uid, null, Collections.emptyList());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             // ✅ Guardamos la autenticación en el contexto
