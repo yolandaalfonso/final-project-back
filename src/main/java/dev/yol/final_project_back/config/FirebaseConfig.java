@@ -1,9 +1,6 @@
 package dev.yol.final_project_back.config;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +18,10 @@ public class FirebaseConfig {
     @Value("classpath:/private-key.json")
     private Resource privateKey;
 
+    /* @Value("${firebase.storage.bucket}")
+    private String storageBucket; */
+
+
     @Bean
 public FirebaseApp firebaseApp() throws IOException {
     // Esto buscará private-key.json dentro de src/main/resources/
@@ -29,6 +30,7 @@ public FirebaseApp firebaseApp() throws IOException {
     if (FirebaseApp.getApps().isEmpty()) {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                .setStorageBucket("final-project-20571.firebasestorage.app") //¿Esto puede estar público?
                 .build();
         return FirebaseApp.initializeApp(options);
     } else {

@@ -37,6 +37,7 @@ public class UserMapper {
                 userEntity.getId_user(),
                 userEntity.getEmail(),
                 userEntity.getProfile().getName(),
+                userEntity.getUid(),
                 userEntity.getProfile().getUserName(),
                 userEntity.getProfile().getFirstSurname(),
                 userEntity.getProfile().getBio(),

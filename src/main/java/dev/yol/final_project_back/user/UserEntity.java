@@ -1,12 +1,19 @@
 package dev.yol.final_project_back.user;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import dev.yol.final_project_back.profile.ProfileEntity;
+import dev.yol.final_project_back.trip.TripEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,6 +35,10 @@ public class UserEntity {
     private Long id_user;
 
     @Column(nullable = false, unique = true, length = 100)
+    private String uid;
+
+
+    @Column(nullable = false, unique = true, length = 100)
     private String email; 
     @Column(nullable = false)
     private String password;
@@ -36,10 +47,10 @@ public class UserEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ProfileEntity profile;
 
-    /* //Relación con Pacientes, que nos permite eliminarlos en cascada cuando borramos el user correspondiente,    
-    @OneToMany(mappedBy = "tutor", cascade = CascadeType.ALL, orphanRemoval = true)
+    //Relación con Viajes, que nos permite eliminarlos en cascada cuando borramos el user correspondiente,    
+    @OneToMany(mappedBy = "traveler", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<PatientEntity> patients = new HashSet<>(); */
+    private Set<TripEntity> trips = new HashSet<>();
 
     
 }

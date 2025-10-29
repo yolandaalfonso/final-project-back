@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                     apiEndpoint + "/register/**",
                     apiEndpoint + "/auth/login",
                     apiEndpoint + "/login",
+                    /* apiEndpoint + "/trips", */
                     "/h2-console/**",
                     "/error" 
                 ).permitAll() // público

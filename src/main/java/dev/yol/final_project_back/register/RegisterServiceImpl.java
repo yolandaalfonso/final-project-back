@@ -65,11 +65,15 @@ public class RegisterServiceImpl implements InterfaceRegisterService{
         user.setProfile(profile);
 
         // ✅ Crea el usuario también en Firebase Authentication
+        String firebaseUid;
         try {
-            firebaseAuth.createUser(new UserRecord.CreateRequest()
+            UserRecord firebaseUser = firebaseAuth.createUser(new UserRecord.CreateRequest()
                     .setEmail(decodedEmail)
                     .setPassword(decodedPassword)
                     .setEmailVerified(true));
+        
+            firebaseUid = firebaseUser.getUid(); // <- aquí obtienes el UID de Firebase
+            user.setUid(firebaseUid); // <- y lo asignas a tu UserEntity
         } catch (FirebaseAuthException e) {
             if (e.getMessage().contains("EMAIL_EXISTS")) {
                 throw new RuntimeException("El usuario ya existe en Firebase");
