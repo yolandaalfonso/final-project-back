@@ -62,6 +62,18 @@ public class TripController {
         return ResponseEntity.ok().body(trip);
     }
 
+    @GetMapping("/user/{idUser}")
+    public ResponseEntity<List<TripResponseDTO>> getTripsByUser(@PathVariable Long idUser) {
+        List<TripResponseDTO> trips = tripService.getTripsByUserId(idUser);
+        
+        if (trips.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(trips);
+    }
+
+
     @PutMapping(value = "/{id}", consumes = { "multipart/form-data" })
     public ResponseEntity<TripResponseDTO> updateEntity(
         @PathVariable("id") Long id,

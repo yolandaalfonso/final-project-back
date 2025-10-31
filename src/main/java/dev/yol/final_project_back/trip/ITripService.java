@@ -12,6 +12,7 @@ public interface ITripService extends IService<TripResponseDTO, TripRequestDTO>{
     List<TripResponseDTO> getEntities();
     TripResponseDTO createEntity(TripRequestDTO tripRequestDTO, List<MultipartFile> files);
     TripResponseDTO getById(Long id);
+    List<TripResponseDTO>getTripsByUserId(Long idUser);
     TripResponseDTO updateEntity(Long id, TripRequestDTO tripRequestDTO, List<MultipartFile> files);
     void deleteEntity(Long id);
 }

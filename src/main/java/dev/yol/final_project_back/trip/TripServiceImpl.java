@@ -3,6 +3,7 @@ package dev.yol.final_project_back.trip;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,6 +55,8 @@ public class TripServiceImpl implements ITripService{
     // 1️⃣ Obtener el usuario autenticado del contexto de Spring Security
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String uid = authentication.getName(); // Firebase UID
+
+    System.out.println("🔹 UID recibido del token en createEntity: " + uid);
     
     // 2️⃣ Buscar el usuario en tu base de datos por UID
     UserEntity user = userRepository.findByUid(uid)
@@ -89,6 +92,7 @@ public class TripServiceImpl implements ITripService{
         }
 
     TripEntity tripStored = repository.save(trip);
+    
 
     // 4️⃣ Devolver el DTO
     return TripMapper.toDTO(tripStored);
@@ -111,6 +115,25 @@ public class TripServiceImpl implements ITripService{
         TripEntity trip = repository.findById(id).orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
         return TripMapper.toDTO(trip);
     }
+
+    /* @Override
+    public List<TripResponseDTO> getTripsByUserId(Long idUser) {
+    return repository.findByTravelerIdUser(idUser)
+                     .stream()
+                     .map(TripMapper::toDTO)
+                     .toList();
+} */
+
+    @Override
+    public List<TripResponseDTO> getTripsByUserId(Long idUser) {
+    List<TripEntity> trips = repository.findByTravelerIdUser(idUser);
+    return trips.stream()
+                .map(TripMapper::toDTO)
+                .collect(Collectors.toList());
+}
+
+
+
 
     /* @Override
     public TripResponseDTO updateEntity(Long id, TripRequestDTO tripRequestDTO) {

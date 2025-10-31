@@ -2,8 +2,6 @@ package dev.yol.final_project_back.config;
 
 import java.util.List;
 
-import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +51,7 @@ public class SecurityConfiguration {
                     apiEndpoint + "/register/**",
                     apiEndpoint + "/auth/login",
                     apiEndpoint + "/login",
+                    apiEndpoint + "/auth/**",
                     /* apiEndpoint + "/trips", */
                     "/h2-console/**",
                     "/error" 

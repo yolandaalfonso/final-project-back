@@ -1,9 +1,12 @@
 package dev.yol.final_project_back.user;
 
+import org.springframework.stereotype.Component;
+
 import dev.yol.final_project_back.profile.ProfileEntity;
 import dev.yol.final_project_back.user.dtos.UserRequestDTO;
 import dev.yol.final_project_back.user.dtos.UserResponseDTO;
 
+@Component
 public class UserMapper {
     public UserEntity userRequestDtoToUserEntity(UserRequestDTO userRequestDTO) {
         UserEntity userEntity = new UserEntity();
