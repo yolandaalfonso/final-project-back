@@ -3,6 +3,7 @@ package dev.yol.final_project_back.trip;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -114,6 +115,25 @@ public class TripServiceImpl implements ITripService{
         TripEntity trip = repository.findById(id).orElseThrow(() -> new RuntimeException("Viaje no encontrado con id: " + id));
         return TripMapper.toDTO(trip);
     }
+
+    /* @Override
+    public List<TripResponseDTO> getTripsByUserId(Long idUser) {
+    return repository.findByTravelerIdUser(idUser)
+                     .stream()
+                     .map(TripMapper::toDTO)
+                     .toList();
+} */
+
+    @Override
+    public List<TripResponseDTO> getTripsByUserId(Long idUser) {
+    List<TripEntity> trips = repository.findByTravelerIdUser(idUser);
+    return trips.stream()
+                .map(TripMapper::toDTO)
+                .collect(Collectors.toList());
+}
+
+
+
 
     /* @Override
     public TripResponseDTO updateEntity(Long id, TripRequestDTO tripRequestDTO) {
