@@ -33,5 +33,25 @@ public class UserController {
             })
             .orElse(ResponseEntity.notFound().build());
     }
+
+    // 🔹 Nuevo endpoint para obtener usuario por UID (Firebase)
+    @GetMapping("/byUid/{uid}")
+    public ResponseEntity<UserResponseDTO> getUserByUid(@PathVariable String uid) {
+        return userRepository.findByUid(uid)
+            .map(user -> {
+                var p = user.getProfile();
+                return ResponseEntity.ok(new UserResponseDTO(
+                    user.getId_user(),
+                    user.getEmail(),
+                    p.getName(),
+                    user.getUid(),
+                    p.getUserName(),
+                    p.getFirstSurname(),
+                    p.getBio(),
+                    p.getAvatar()
+                ));
+            })
+            .orElse(ResponseEntity.notFound().build());
+    }
    
 }
