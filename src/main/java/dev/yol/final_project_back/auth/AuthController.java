@@ -71,7 +71,7 @@ public class AuthController {
 
         var dto = userMapper.userEntityToUserResponseDto(userOpt.get());
         return ResponseEntity.ok(dto);
-}
+    }
 
 
 }

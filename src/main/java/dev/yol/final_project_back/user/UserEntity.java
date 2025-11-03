@@ -50,6 +50,7 @@ public class UserEntity {
     //Relación con Viajes, que nos permite eliminarlos en cascada cuando borramos el user correspondiente,    
     @OneToMany(mappedBy = "traveler", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @Builder.Default
     private Set<TripEntity> trips = new HashSet<>();
 
     
