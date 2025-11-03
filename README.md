@@ -42,18 +42,18 @@ cd final-project-back
 Create a `.env` file in the root directory with the following variables:
 
 ```env
-DATABASE_URL=jdbc:postgresql://localhost:5432/triply_db
+DATABASE_URL=jdbc:postgresql://localhost:5432/mydatabase
 DATABASE_USERNAME=your_database_username
 DATABASE_PASSWORD=your_database_password
 SPRING_PROFILES_ACTIVE=dev
-API_ENDPOINT=/api/v1
+API_ENDPOINT=/api
 ```
 
 ### Database Setup
 
 You need to set up the following environment variables to connect to the database:
 
-- **DATABASE_URL**: The JDBC connection URL for your PostgreSQL database. Example: `jdbc:postgresql://localhost:5432/triply_db`
+- **DATABASE_URL**: The JDBC connection URL for your PostgreSQL database. Example: `jdbc:postgresql://localhost:5432/mydatabase`
 
 - **DATABASE_USERNAME**: The username used to access the database. Replace with the username that has permission to access and manage the database. Example: `admin_user`
 
