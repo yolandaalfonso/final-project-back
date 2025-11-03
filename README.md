@@ -1,4 +1,5 @@
-Triply - Travel Social Network
+#Triply - Travel Social Network
+
 Triply is a social network platform for travelers where users can document and share their journeys. Users can create travel entries with titles, descriptions, countries visited, dates, and photos, building a personal travel diary while connecting with other travelers.
 Key features include user authentication via Firebase, trip management with photo storage, and a social feed to explore other travelers' adventures. The platform is built with Spring Boot (backend) and React (frontend), ensuring a smooth and responsive experience.
 Table of Contents
@@ -15,7 +16,7 @@ Future Improvements
 Contributors
 Disclaimer
 
-Prerequisites
+##Prerequisites
 Before running this project, ensure you have the following installed on your machine:
 
 Java 21 or later
@@ -25,7 +26,8 @@ Docker (optional, for containerized databases)
 Firebase account
 Node.js and npm (for the frontend)
 
-Installation
+##Installation
+
 Instructions on how to install and set up the project.
 bashgit clone https://github.com/yolandaalfonso/final-project-back.git
 cd final-project-back
@@ -78,8 +80,8 @@ Open your browser and go to: http://localhost:8080/swagger-ui.html
 Main Endpoints
 Authentication
 
-POST /api/v1/auth/register - Register a new user
-POST /api/v1/auth/login - Login with Firebase token
+POST /api/register - Register a new user
+POST /api/auth/login - Login with Firebase token
 
 Trips
 
