@@ -191,11 +191,10 @@ Running the tests regularly helps ensure that new changes do not break existing 
 
 ## Tools
 
-- IntelliJ IDEA / Visual Studio Code
-- Swagger
+- Visual Studio Code
 - Postman
 - Docker
-- PostgreSQL / pgAdmin
+- PostgreSQL
 - Firebase Console
 
 ## Known Issues
