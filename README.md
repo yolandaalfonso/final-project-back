@@ -93,7 +93,7 @@ The API will be available at `http://localhost:8080`
 
 ## Endpoints
 
-API endpoint base: `/api/v1`
+API endpoint base: `/api`
 
 ### Swagger Documentation
 
@@ -115,15 +115,15 @@ We use Swagger (OpenAPI) to provide clear, interactive documentation for our API
 - `POST /api/v1/auth/login` - Login with Firebase token
 
 #### Trips
-- `GET /api/v1/trips` - Get all trips
-- `GET /api/v1/trips/{id}` - Get trip by ID
-- `POST /api/v1/trips` - Create a new trip (requires authentication)
-- `PUT /api/v1/trips/{id}` - Update a trip (requires authentication)
-- `DELETE /api/v1/trips/{id}` - Delete a trip (requires authentication)
+- `GET /api/trips` - Get all trips
+- `GET /api/trips/{id}` - Get trip by ID
+- `POST /api/trips` - Create a new trip (requires authentication)
+- `PUT /api/trips/{id}` - Update a trip (requires authentication)
+- `DELETE /api/trips/{id}` - Delete a trip (requires authentication)
 
 #### Profile
-- `GET /api/v1/profile/{userId}` - Get user profile
-- `PUT /api/v1/profile/{userId}` - Update user profile (requires authentication)
+- `GET /api/profile/{userId}` - Get user profile
+- `PUT /api/profile/{userId}` - Update user profile (requires authentication)
 
 ## Project Structure
 
